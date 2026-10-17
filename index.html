@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Для тебя</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbdfe6;--frame:#c4788c;--ink:#7a4553;--soft:#a77482;--btn:#f0c5cf;--btn-ink:#5e2f3d;--card:#fffbfc;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2b2024;--frame:#9a6c79;--ink:#f0d6dd;--soft:#c9a2ad;--btn:#8a5766;--btn-ink:#fff0f3;--card:#33262b}}
+:root[data-theme="dark"]{--bg:#2b2024;--frame:#9a6c79;--ink:#f0d6dd;--soft:#c9a2ad;--btn:#8a5766;--btn-ink:#fff0f3;--card:#33262b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:'Comfortaa','Trebuchet MS',sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
+.page{display:none;width:100%;max-width:440px;text-align:center;flex-direction:column;align-items:center;gap:26px}
+.page.on{display:flex;animation:in .5s ease}
+@keyframes in{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.frame{position:relative;width:100%;padding:26px 20px 24px;background:var(--card);border-radius:30px}
+.frame::before{content:"";position:absolute;inset:0;border:5px solid var(--frame);border-radius:30px;filter:url(#wavy);pointer-events:none}
+.frame svg{width:100%;height:auto;display:block;margin-bottom:14px}
+h1{font-size:1.5rem;line-height:1.4;margin:0;font-weight:700}
+.small{font-size:.8rem;color:var(--soft);margin:0}
+.timer{font-size:2.2rem;font-weight:700;letter-spacing:.06em}
+button{font:inherit;font-weight:700;font-size:1.05rem;color:var(--btn-ink);background:var(--btn);border:0;border-radius:999px;padding:14px 30px;cursor:pointer;transition:transform .15s}
+button:hover{transform:scale(1.05)}button:active{transform:scale(.96)}
+button:focus-visible{outline:3px solid var(--frame);outline-offset:3px}
+.row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.opts button{padding:16px 8px;font-size:1rem}
+.opts .wide{grid-column:1/-1}
+.custom{display:none;gap:10px;width:100%}
+.custom input{flex:1;min-width:0;font:inherit;font-size:16px;padding:14px 18px;border:3px solid var(--frame);border-radius:999px;background:var(--card);color:var(--ink)}
+.pv{position:fixed;left:0;right:0;bottom:0;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;justify-content:center;background:rgba(60,30,40,.6);z-index:9}
+.pv button{padding:9px 13px;font-size:.85rem}
+.bob{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.eyes{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.fl{transform-box:fill-box;transform-origin:center;animation:fl 2.2s ease-in-out infinite}
+@keyframes fl{0%{transform:translateY(6px) scale(.8);opacity:.3}50%{opacity:1}100%{transform:translateY(-16px) scale(1.1);opacity:0}}
+.wig{transform-box:fill-box;transform-origin:center bottom;animation:wig 1.6s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.gone{display:none}
+.big{animation:beat 1.2s infinite}
+@keyframes beat{50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.page.on,.big,.bob,.eyes,.fl,.wig{animation:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="wavy"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="1" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter></svg>
+
+<!-- 1 -->
+<section class="page on" id="p1">
+  <div class="frame"><div class="art" data-art="pair-gift"></div><h1>Скоро ты увидишь кое-что особенное…</h1></div>
+  <div class="timer" id="timer">00:00</div>
+  <div id="ready" class="gone" style="display:none;flex-direction:column;align-items:center;gap:18px">
+    <h1>Время пришло!</h1><button id="go1">Узнать что там</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="page" id="p2">
+  <div class="frame"><div class="art" data-art="pair-big"></div><h1>Ты пойдёшь со мной на свидание?</h1></div>
+  <div class="row"><button id="yes">Да</button><button id="no">Нет</button></div>
+</section>
+
+<!-- 3 -->
+<section class="page" id="p3">
+  <div class="frame"><div class="art" data-art="happy"></div><h1>Ты действительно сказала да?</h1><p class="small" style="margin-top:10px">Я думал ты откажешь и мы будем сидеть дома</p></div>
+  <button id="go3">Да Да Да</button>
+</section>
+
+<!-- 4 -->
+<section class="page" id="p4">
+  <div class="frame"><div class="art" data-art="pair"></div><h1 id="when4"></h1></div>
+  <button id="go4">Далее</button>
+</section>
+
+<!-- 5 -->
+<section class="page" id="p5">
+  <div class="frame"><h1 id="q5">Что ты хочешь?</h1></div>
+  <div class="opts" id="opts"></div>
+  <div class="custom" id="custom"><input id="cin" maxlength="60" placeholder="Напиши свой вариант"><button id="cok">Готово</button></div>
+</section>
+
+<!-- 6 -->
+<section class="page" id="p6">
+  <div class="frame">
+    <svg class="big" viewBox="0 0 100 90" role="img" aria-label="Сердце"><path d="M50 84C14 56 6 36 6 24 6 12 16 4 27 4c9 0 18 5 23 14C55 9 64 4 73 4c11 0 21 8 21 20 0 12-8 32-44 60z" fill="#e9a3b4" stroke="#c48b99" stroke-width="3"/><path d="M20 22c1-7 6-11 12-11" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/></svg>
+    <h1>Рад что не отказалась</h1>
+  </div>
+  <p class="small" style="font-size:1.2rem;line-height:1.5;color:var(--ink)">Будь готова к <span id="when6"></span></p>
+</section>
+
+<script>
+// ===== НАСТРОЙКИ =====
+// Дату можно поменять здесь или добавить в ссылку: ...?d=Суббота, 19:00
+const DATE_TEXT = "8 ноября 2026 в 20:00";
+// Таймер: открытие 17.10.2026 в 12:00 по Астане (UTC+5)
+const OPEN_AT = '2026-10-17T12:00:00+05:00';
+// =====================
+const q = new URLSearchParams(location.search);
+const when = q.get('d') || DATE_TEXT;
+document.getElementById('when4').textContent = when;
+document.getElementById('when6').textContent = when;
+
+// --- коты ---
+function cat(tx, fur, inner, mood){
+  const eyes = mood==='happy'
+    ? '<path d="M35 52q8-11 16 0M69 52q8-11 16 0" stroke="#4a2c36" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+    : (mood==='big'
+      ? '<circle cx="43" cy="50" r="8" fill="#4a2c36"/><circle cx="77" cy="50" r="8" fill="#4a2c36"/><circle cx="40" cy="47" r="3" fill="#fff"/><circle cx="74" cy="47" r="3" fill="#fff"/><circle cx="46" cy="53" r="1.6" fill="#fff"/><circle cx="80" cy="53" r="1.6" fill="#fff"/>'
+      : '<circle cx="43" cy="50" r="5.5" fill="#4a2c36"/><circle cx="77" cy="50" r="5.5" fill="#4a2c36"/><circle cx="41" cy="48" r="2" fill="#fff"/><circle cx="75" cy="48" r="2" fill="#fff"/>');
+  const mouth = mood==='happy'
+    ? '<path d="M50 65q10 14 20 0z" fill="#d97c8f" stroke="#4a2c36" stroke-width="2.5" stroke-linejoin="round"/>'
+    : '<path d="M60 64q-5 7-11 3M60 64q5 7 11 3" stroke="#4a2c36" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  return `<g transform="translate(${tx},6)"><g class="bob" style="animation-delay:${tx>50?-1.2:0}s">
+  <ellipse cx="60" cy="96" rx="34" ry="22" fill="${fur}"/>
+  <ellipse cx="44" cy="112" rx="11" ry="6" fill="${fur}" stroke="#d9b9c0" stroke-width="1.5"/><ellipse cx="76" cy="112" rx="11" ry="6" fill="${fur}" stroke="#d9b9c0" stroke-width="1.5"/>
+  <path d="M20 44L26 6L58 26Z M100 44L94 6L62 26Z" fill="${fur}"/>
+  <path d="M30 30L32 16L46 25Z M90 30L88 16L74 25Z" fill="${inner}"/>
+  <ellipse cx="60" cy="54" rx="46" ry="36" fill="${fur}"/>
+  <g class="eyes">${eyes}</g>
+  <ellipse cx="29" cy="62" rx="8" ry="5" fill="${inner}" opacity=".7"/><ellipse cx="91" cy="62" rx="8" ry="5" fill="${inner}" opacity=".7"/>
+  <path d="M55 58h10l-5 6z" fill="#e58a9d"/>${mouth}
+  <path d="M20 58l-14-3M20 64l-14 3M100 58l14-3M100 64l14 3" stroke="#b8959d" stroke-width="2" stroke-linecap="round"/>
+  </g></g>`;
+}
+let hd = 0;
+const heart = (x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><path class="fl" style="animation-delay:${(hd++*.7)%2.2}s" d="M10 18C-2 9-2 1 4 0c4-1 6 2 6 4 0-2 2-5 6-4 6 1 6 9-6 18z" fill="#e9a3b4"/></g>`;
+function art(kind){
+  const m = kind==='pair-big'?'big':kind==='happy'?'happy':'n';
+  if(kind==='happy') return `<svg viewBox="0 0 260 130" role="img" aria-label="Счастливый котик">${cat(70,'#f6d9b8','#f3b4bf','happy')}${heart(200,20,2.2)}${heart(215,70,1.4)}${heart(30,15,1.2)}</svg>`;
+  const gift = kind==='pair-gift'
+    ? '<g class="wig"><rect x="116" y="82" width="28" height="26" rx="3" fill="#e9a3b4"/><rect x="127" y="82" width="6" height="26" fill="#fff4f6"/><path d="M130 82c-12-14-20-4-8 0M130 82c12-14 20-4 8 0" stroke="#fff4f6" stroke-width="3" fill="none"/></g>'
+    : heart(120,40,1.6) + heart(112,22,.9) + heart(138,26,.8);
+  return `<svg viewBox="0 0 260 130" role="img" aria-label="Два котика">${cat(-6,'#f6d9b8','#f3b4bf',m)}${cat(146,'#d7d4e2','#f3b4bf',m)}${gift}</svg>`;
+}
+document.querySelectorAll('.art').forEach(e=>e.innerHTML=art(e.dataset.art));
+
+// --- навигация ---
+const show = id => { document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id)); };
+
+// --- таймер ---
+const target = new Date(q.get('t') || OPEN_AT).getTime();
+const tEl = document.getElementById('timer'), ready = document.getElementById('ready');
+(function tick(){
+  const left = Math.max(0, Math.ceil((target-Date.now())/1000));
+  const h = Math.floor(left/3600), m = Math.floor(left%3600/60), s = left%60;
+  const p = n=>String(n).padStart(2,'0');
+  tEl.textContent = (h?p(h)+':':'')+p(m)+':'+p(s);
+  if(left>0) return setTimeout(tick,250);
+  tEl.style.display='none'; ready.style.display='flex';
+  document.querySelector('#p1 .frame h1').textContent='Скоро ты увидишь кое-что особенное…';
+})();
+go1.onclick = ()=>show('p2');
+no.onclick = ()=>{ no.classList.add('gone'); };
+yes.onclick = ()=>show('p3');
+go3.onclick = ()=>show('p4');
+go4.onclick = ()=>show('p5');
+
+// --- выбор еды и активностей ---
+const steps = [
+  {q:'Что ты хочешь?', btn:true, o:['🍕 Пицца','🍣 Суши','🍔 Бургер','🍝 Паста','🌯 Донер','🍜 Рамен','🍲 Суп','🥟 Хинкали','🥟 Пельмешки']},
+  {q:'Чем займёмся?', always:true, o:['🚶 Прогулка','🎱 Бильярд','🎬 Кино','🎤 Караоке','🍺 По пиву дома','🍽️ Ресторан/кафе']}
+];
+let step = 0; const choice = [];
+const next = t=>{ choice.push(t); if(++step<steps.length) render(); else show('p6'); };
+function render(){
+  q5.textContent = steps[step].q;
+  opts.innerHTML = ''; cin.value = '';
+  custom.style.display = steps[step].always ? 'flex' : 'none';
+  steps[step].o.forEach(t=>{
+    const b = document.createElement('button'); b.textContent = t;
+    b.onclick = ()=>next(t);
+    opts.appendChild(b);
+  });
+  if(steps[step].btn){
+    const b = document.createElement('button'); b.textContent = '✍️ Свой вариант'; b.className = 'wide';
+    b.onclick = ()=>{ custom.style.display = 'flex'; cin.focus(); };
+    opts.appendChild(b);
+  }
+}
+cok.onclick = ()=>{ const v = cin.value.trim(); if(v) next(v); else cin.focus(); };
+cin.onkeydown = e=>{ if(e.key==='Enter') cok.onclick(); };
+render();
+
+// ===== ПРЕДПРОСМОТР: поставь false, чтобы убрать панель =====
+const PREVIEW = false;
+if(PREVIEW){
+  const bar = document.createElement('div'); bar.className = 'pv';
+  const mk = (t,f)=>{ const b = document.createElement('button'); b.textContent = t; b.onclick = f; bar.appendChild(b); };
+  mk('1',()=>show('p1'));
+  mk('1б',()=>{ show('p1'); tEl.style.display='none'; ready.style.display='flex'; });
+  mk('2',()=>{ show('p2'); no.classList.remove('gone'); });
+  mk('3',()=>show('p3'));
+  mk('4',()=>show('p4'));
+  mk('5',()=>{ step=0; render(); show('p5'); });
+  mk('5б',()=>{ step=1; render(); show('p5'); });
+  mk('6',()=>show('p6'));
+  document.body.appendChild(bar);
+}
+</script>
+</body>
+</html>
